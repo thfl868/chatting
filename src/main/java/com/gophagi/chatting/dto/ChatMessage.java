@@ -9,7 +9,7 @@ public
 class ChatMessage {
     // 메시지 타입 : 입장, 채팅
     public enum MessageType {
-        JOIN, TALK
+        ENTER, JOIN, TALK
     }
     private MessageType type; // 메시지 타입
     private String roomId; // 방번호
