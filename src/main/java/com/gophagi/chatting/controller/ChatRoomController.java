@@ -26,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class ChatRoomController {
 
 	private final ChatRoomRepository chatRoomRepository;
+	private final JwtTokenProvider jwtTokenProvider;
 
 	// 채팅 리스트 화면
 	@GetMapping("/room")
@@ -37,7 +38,10 @@ public class ChatRoomController {
 	@GetMapping("/rooms")
 	@ResponseBody
 	public List<ChatRoom> room() {
-		return chatRoomRepository.findAllRoom();
+		List<ChatRoom> chatRooms = chatRoomRepository.findAllRoom();
+		chatRooms.stream()
+			.forEach(room -> room.setUserCount(chatRoomRepository.getUserCount(room.getRoomId())));
+		return chatRooms;
 	}
 
 	// 채팅방 생성
@@ -60,8 +64,6 @@ public class ChatRoomController {
 	public ChatRoom roomInfo(@PathVariable String roomId) {
 		return chatRoomRepository.findRoomById(roomId);
 	}
-
-	private final JwtTokenProvider jwtTokenProvider;
 
 	@GetMapping("/user")
 	@ResponseBody
